@@ -1,10 +1,9 @@
 <div align="center">
 
-  <h1>
-    <span style="background: linear-gradient(45deg, #ff416c, #ff4b2b, #8a2387, #e94057, #f27121); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.3em;">
-      💰 Salary & Expenditure System 🚀
-    </span>
-  </h1>
+  <!-- Animated Header Graphic with Zoom & Color Effect -->
+  <a href="https://github.com/Sonali99Kar/SALARY-EXPENDITURE-SYSTEM">
+    <img src="https://readme-typing-svg.demolab.com?font=Fira+Code&weight=700&size=28&duration=3000&pause=1000&color=FF4B2B&center=true&vCenter=true&width=600&height=70&lines=💰+Salary+%26+Expenditure+System+🚀;Track+Income+%26+Manage+Budgets!" alt="Typing SVG" />
+  </a>
 
   <p style="color: #8b949e; font-size: 1.1em;">
     A smart and efficient way to manage your finances, track spending, and analyze budgets.
@@ -12,7 +11,7 @@
 
   <br>
 
-  <!-- Interactive / Hover Highlight Blocks -->
+  <!-- Interactive Action Badges -->
   <table width="100%" style="border: none; border-collapse: collapse;">
     <tr>
       <td width="50%" align="center" style="padding: 10px;">
