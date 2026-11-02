@@ -23,3 +23,1223 @@
               300: '#fde047',
               400: '#facc15',
               500: '#eab308',
+       600: '#ca8a04',
+            },
+            vault: {
+              800: '#0c1a14',
+              850: '#08140f',
+              900: '#040d09',
+              950: '#020705',
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'system-ui', 'sans-serif'],
+            mono: ['Fira Code', 'Consolas', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+    body {
+      overflow: hidden;
+      user-select: none;
+      -webkit-user-select: none;
+      background-color: #030a07;
+      color: #f0fdf4;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Subtle Floating Financial Symbols Background Pattern */
+    .money-watermark-bg {
+      background-image: 
+        radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.15) 0%, rgba(2, 7, 5, 0) 65%),
+        linear-gradient(rgba(234, 179, 8, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(234, 179, 8, 0.03) 1px, transparent 1px);
+      background-size: 100% 100%, 48px 48px, 48px 48px;
+    }
+
+    /* Golden-Emerald Laser Pointer */
+    #laser-pointer {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fef08a 0%, #eab308 50%, #10b981 80%, rgba(16, 185, 129, 0) 100%);
+      box-shadow: 0 0 14px 4px rgba(250, 204, 21, 0.95), 0 0 28px 8px rgba(16, 185, 129, 0.65);
+      pointer-events: none;
+      transform: translate(-50%, -50%);
+      z-index: 99999;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.04s ease-out;
+      mix-blend-mode: screen;
+    }
+
+    #laser-trail-canvas {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      pointer-events: none;
+      z-index: 99998;
+    }
+
+    /* Slide Deck Horizontal Slider */
+    #slider-container {
+      display: flex;
+      width: 1300vw; /* 13 slides */
+      height: 100vh;
+      transition: transform 0.65s cubic-bezier(0.16, 1, 0.3, 1);
+      will-change: transform;
+    }
+
+    .slide {
+      width: 100vw;
+      height: 100vh;
+      flex-shrink: 0;
+      box-sizing: border-box;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      padding: 3.5rem 4rem 5.5rem 4rem;
+      position: relative;
+    }
+
+    @media (max-width: 768px) {
+      .slide {
+        padding: 2rem 1.5rem 5rem 1.5rem;
+      }
+    }
+
+    pre code {
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      line-height: 1.45;
+    }
+
+    /* Vault Glass Panels with Gold/Emerald Border Trim */
+    .glass-card {
+      background: rgba(8, 24, 18, 0.78);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(234, 179, 8, 0.2);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.8), inset 0 1px 0 rgba(254, 240, 138, 0.15);
+      transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1), 
+                  box-shadow 0.3s ease, 
+                  border-color 0.3s ease,
+                  background-color 0.3s ease;
+      position: relative;
+    }
+
+    .glass-card-interactive {
+      transition: all 0.25s ease;
+    }
+    .glass-card-interactive:hover {
+      border-color: rgba(250, 204, 21, 0.6);
+      transform: translateY(-3px);
+      box-shadow: 0 22px 45px -10px rgba(16, 185, 129, 0.3);
+    }
+
+    /* Laser Target Pop-up & High-Tech Money Glow */
+    .laser-target {
+      transition: transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1),
+                  box-shadow 0.32s ease,
+                  border-color 0.32s ease,
+                  background-color 0.32s ease;
+      will-change: transform, box-shadow;
+    }
+
+    .laser-hovered {
+      transform: translateY(-8px) scale(1.028) !important;
+      border-color: #facc15 !important;
+      box-shadow: 0 24px 45px -8px rgba(234, 179, 8, 0.45),
+                  0 0 26px 4px rgba(16, 185, 129, 0.45),
+                  inset 0 0 20px rgba(250, 204, 21, 0.2) !important;
+      background-color: rgba(13, 38, 28, 0.95) !important;
+      z-index: 30 !important;
+    }
+
+    /* Golden Cash Sparks */
+    .laser-spark {
+      position: fixed;
+      pointer-events: none;
+      border-radius: 50%;
+      background: #facc15;
+      box-shadow: 0 0 8px #fef08a, 0 0 14px #10b981;
+      z-index: 99996;
+      animation: sparkFly 0.48s ease-out forwards;
+    }
+
+    @keyframes sparkFly {
+      0% {
+        transform: translate(0, 0) scale(1) rotate(0deg);
+        opacity: 1;
+      }
+      100% {
+        transform: translate(var(--tx), var(--ty)) scale(0) rotate(180deg);
+        opacity: 0;
+      }
+    }
+
+    /* Gold Coin Ripple on Laser Click */
+    .click-ripple {
+      position: absolute;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      border: 2px solid #facc15;
+      box-shadow: 0 0 12px #eab308;
+      transform: translate(-50%, -50%) scale(0.2);
+      animation: goldRipple 0.55s ease-out forwards;
+      pointer-events: none;
+      z-index: 99997;
+    }
+
+    @keyframes goldRipple {
+      to {
+        transform: translate(-50%, -50%) scale(2.6);
+        opacity: 0;
+      }
+    }
+
+    .currency-watermark {
+      position: absolute;
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: rgba(16, 185, 129, 0.04);
+      pointer-events: none;
+      user-select: none;
+      z-index: 0;
+    }
+  </style>
+</head>
+<body class="bg-vault-950 text-slate-100 antialiased select-none overflow-hidden relative money-watermark-bg">
+
+  <!-- Floating Currency Ambient Watermarks -->
+  <div class="currency-watermark top-10 right-16 text-9xl">₹</div>
+  <div class="currency-watermark bottom-12 left-10 text-9xl">$</div>
+  <div class="currency-watermark top-1/3 left-1/4 text-8xl">₿</div>
+  <div class="currency-watermark bottom-24 right-1/4 text-8xl">€</div>
+
+  <!-- Virtual Laser Pointer and Trail Canvas -->
+  <div id="laser-pointer"></div>
+  <canvas id="laser-trail-canvas"></canvas>
+
+  <!-- Top Progress Bar (Gold to Emerald) -->
+  <div class="fixed top-0 left-0 right-0 h-1.5 bg-vault-900 z-50">
+    <div id="progress-bar" class="h-full bg-gradient-to-r from-emerald-500 via-gold-400 to-amber-300 transition-all duration-300 w-[7.69%]"></div>
+  </div>
+
+  <!-- Top Bar Badges -->
+  <header class="fixed top-3 left-6 right-6 flex items-center justify-between z-40 pointer-events-none">
+    <div class="flex items-center space-x-3 pointer-events-auto">
+      <div class="px-3 py-1 bg-vault-900/90 backdrop-blur rounded-lg border border-gold-500/40 text-xs font-semibold text-gold-300 tracking-wide flex items-center gap-2 shadow-lg">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_#34d399] animate-pulse"></span>
+        <span>IIIT BHUBANESWAR</span>
+      </div>
+      <span class="hidden md:inline-block text-xs text-emerald-400/80 font-medium">Fintech Software Engineering Project</span>
+    </div>
+
+    <div class="flex items-center space-x-2 pointer-events-auto">
+      <!-- Pointer Active Indicator -->
+      <button id="toggle-laser-btn" class="px-3.5 py-1.5 rounded-lg border text-xs font-semibold transition flex items-center gap-2 bg-vault-900/90 border-gold-500/30 hover:border-gold-400 text-gold-200 shadow-md">
+        <span id="laser-indicator-dot" class="w-2.5 h-2.5 rounded-full bg-gold-400 shadow-[0_0_10px_#facc15]"></span>
+        <span>Gold Laser <kbd class="px-1 py-0.5 ml-1 bg-vault-950 text-gold-400 rounded text-[10px] border border-gold-500/30">L</kbd></span>
+      </button>
+
+      <!-- Grid Overview Toggle -->
+      <button id="toggle-grid-btn" class="p-1.5 rounded-lg border bg-vault-900/90 border-emerald-900/60 hover:border-gold-400 text-slate-300 hover:text-gold-300 transition" title="Grid Overview (G)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"></path>
+        </svg>
+      </button>
+
+      <!-- Fullscreen Toggle -->
+      <button id="toggle-fullscreen-btn" class="p-1.5 rounded-lg border bg-vault-900/90 border-emerald-900/60 hover:border-gold-400 text-slate-300 hover:text-gold-300 transition" title="Fullscreen (F)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 8V4m0 0h4M4 4l5 5m11-1V4m0 0h-4m4 0l-5 5M4 16v4m0 0h4m-4 0l5-5m11 5l-5-5m5 5v-4m0 4h-4"></path>
+        </svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========================================================================= -->
+  <!-- SLIDES VIEWPORT (Horizontal Track) -->
+  <!-- ========================================================================= -->
+  <main id="slider-container">
+
+    <!-- SLIDE 1: Title & Academic Attribution -->
+    <section class="slide">
+      <div class="max-w-5xl w-full text-center space-y-6 z-10">
+        <div class="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-emerald-950/80 border border-gold-500/40 text-gold-300 text-xs tracking-wider uppercase font-semibold mb-2 shadow-lg">
+          <span class="text-emerald-400">❖</span>
+          <span>B.Tech Project Presentation &amp; Technical Defense</span>
+          <span class="text-emerald-400">❖</span>
+        </div>
+
+        <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight bg-gradient-to-r from-gold-300 via-emerald-300 to-amber-200 bg-clip-text text-transparent drop-shadow-sm">
+          Salary Management System
+        </h1>
+        <p class="text-lg md:text-xl text-emerald-100/80 font-light max-w-2xl mx-auto">
+          An Object-Oriented C++ Financial Engine for Cash-Flow Tracking, Wealth Accumulation, &amp; Priority Waterfall Allocation
+        </p>
+
+        <!-- Academic Credentials Panel (Vault Gold Trim) -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 max-w-3xl mx-auto pt-4 text-left">
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30 flex items-start space-x-4">
+            <div class="w-12 h-12 rounded-lg bg-emerald-900/60 border border-gold-400/50 flex items-center justify-center text-gold-300 shrink-0 font-bold text-lg shadow-inner">
+              ₹
+            </div>
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">Presented By</span>
+              <h3 class="text-lg font-bold text-white leading-tight">Sonali Swetapadma Kar</h3>
+              <p class="text-xs text-gold-400 font-mono mt-0.5">Student ID: B125121</p>
+              <p class="text-xs text-slate-300 mt-1">Computer Science &amp; Engineering</p>
+            </div>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30 flex items-start space-x-4">
+            <div class="w-12 h-12 rounded-lg bg-emerald-900/60 border border-gold-400/50 flex items-center justify-center text-gold-300 shrink-0 font-bold text-lg shadow-inner">
+              🏛️
+            </div>
+            <div>
+              <span class="text-[11px] font-semibold uppercase tracking-wider text-emerald-400">Supervised By</span>
+              <h3 class="text-lg font-bold text-white leading-tight">Dr. Soubhagya Srichandan</h3>
+              <p class="text-xs text-gold-400 font-medium mt-0.5">Associate Professor</p>
+              <p class="text-xs text-slate-300 mt-1">IIIT Bhubaneswar</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex items-center justify-center gap-6 pt-4 text-xs text-slate-300">
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-gold-400"></span> Pure ISO C++17 Standard</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-emerald-400"></span> Zero External Dependencies</span>
+          <span class="flex items-center gap-1.5"><span class="w-2 h-2 rounded-full bg-amber-400"></span> Deterministic Memory Management</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Motivation & Problem Statement -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Financial Context &amp; Motivation</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">The Personal Wealth Dilemma</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div class="glass-card laser-target p-6 rounded-xl border-l-4 border-l-rose-500">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-rose-500"></span> Unstructured Cash Drain
+            </h3>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Without algorithmic budget envelopes, individuals suffer from lifestyle creep, unregulated discretionary spending, and lack of systematic debt repayment protocols.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border-l-4 border-l-gold-500">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-gold-400"></span> Algorithmic Discipline
+            </h3>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Provides an institutional-grade, privacy-first personal wealth engine capable of isolating gross compensation, statutory TDS, and retirement contributions (EPF/NPS).
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border-l-4 border-l-emerald-500">
+            <h3 class="text-base font-bold text-white flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-400"></span> Future Wealth Velocity
+            </h3>
+            <p class="text-xs text-slate-300 mt-3 leading-relaxed">
+              Transforms passive receipt logging into automated capital compounding projections, prioritized waterfall savings, and survival liquidity diagnostics.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card laser-target p-4 rounded-xl flex items-center justify-between text-xs text-slate-300 border border-gold-500/30">
+          <span class="font-semibold text-gold-400">Financial Principle:</span>
+          <span>"Do not save what is left after spending, but spend what is left after saving." — Warren Buffett</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: System Architecture -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Structural Decomposition</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Four-Tier Financial Engine Architecture</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-4 pt-2">
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-gold-400">
+            <div class="text-gold-400 font-mono text-xs font-bold mb-2">TIER 01</div>
+            <h4 class="font-bold text-sm text-white">Presentation Console</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Encapsulated inside namespace <code class="text-gold-300">UI</code>. Formats tabular reports, double-rule borders, and color-coded ASCII telemetry bars.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-emerald-400">
+            <div class="text-emerald-400 font-mono text-xs font-bold mb-2">TIER 02</div>
+            <h4 class="font-bold text-sm text-white">Input Sanitization</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Namespace <code class="text-emerald-300">InputHelper</code>. Recovers from stream failures, clearing <code class="text-slate-200">cin.fail()</code> and purging buffer newlines via <code class="text-slate-200">cin.ignore()</code>.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-amber-400">
+            <div class="text-amber-400 font-mono text-xs font-bold mb-2">TIER 03</div>
+            <h4 class="font-bold text-sm text-white">Domain Core</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Polymorphic base <code class="text-amber-300">Expense</code>, derived fixed/variable models, <code class="text-amber-300">Salary</code> tax structures, and prioritized <code class="text-amber-300">FinancialGoal</code> objects.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-emerald-500">
+            <div class="text-emerald-400 font-mono text-xs font-bold mb-2">TIER 04</div>
+            <h4 class="font-bold text-sm text-white">Financial Analytics</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Cascade simulations, annuity wealth calculations, RFC-4180 CSV export, and flat-file disk serialization.
+            </p>
+          </div>
+        </div>
+
+        <div class="laser-target p-4 rounded-xl bg-vault-900 border border-gold-500/30 text-xs font-mono text-slate-300 flex items-center justify-between">
+          <span class="text-gold-400 font-bold">Execution Pipeline:</span>
+          <span>Income Stream ➔ Deductions Deducted ➔ Expense Matrix ➔ Surplus Dispatch ➔ Wealth Compounding</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: Domain Hierarchy & Polymorphism -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-5 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Object-Oriented Design</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Polymorphic Expense Hierarchy</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-5 space-y-4">
+            <div class="glass-card laser-target p-4 rounded-xl border-l-4 border-l-gold-400">
+              <h4 class="font-bold text-sm text-white">Abstract Base: Expense</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                Pure virtual function <code class="text-gold-300">virtual string getType() const = 0;</code> with virtual destructor ensures correct runtime polymorphic destruction.
+              </p>
+            </div>
+
+            <div class="glass-card laser-target p-4 rounded-xl border-l-4 border-l-emerald-400">
+              <h4 class="font-bold text-sm text-white">Concrete: FixedExpense</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                Manages essential, recurring baseline overheads: apartment lease rent, insurance policies, and debt amortizations.
+              </p>
+            </div>
+
+            <div class="glass-card laser-target p-4 rounded-xl border-l-4 border-l-amber-400">
+              <h4 class="font-bold text-sm text-white">Concrete: VariableExpense</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                Models fluctuating monthly discretionary outflows: dining out, shopping, and entertainment subscriptions.
+              </p>
+            </div>
+          </div>
+
+          <!-- Code Panel (Vault Obsidian with Emerald/Gold syntax) -->
+          <div class="md:col-span-7 laser-target bg-vault-950 p-4 rounded-xl border border-gold-500/40 shadow-2xl overflow-x-auto text-left font-mono">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-emerald-900/60 text-[11px] text-slate-400">
+              <span>ExpenseModel.hpp</span>
+              <span class="text-gold-400">C++17 Polymorphic Interface</span>
+            </div>
+            <pre><code class="text-slate-300"><span class="text-emerald-400">class</span> <span class="text-gold-300 font-bold">Expense</span> {
+<span class="text-emerald-400">protected</span>:
+    <span class="text-amber-200">string</span> category, description;
+    <span class="text-amber-200">double</span> amount;
+    <span class="text-amber-200">ExpenseClassification</span> classification;
+<span class="text-emerald-400">public</span>:
+    <span class="text-emerald-400">virtual</span> ~<span class="text-gold-300">Expense</span>() = <span class="text-emerald-400">default</span>;
+    <span class="text-emerald-400">virtual</span> <span class="text-amber-200">string</span> <span class="text-gold-400">getType</span>() <span class="text-emerald-400">const</span> = <span class="text-emerald-400">0</span>;
+    <span class="text-amber-200">double</span> <span class="text-gold-400">getAmount</span>() <span class="text-emerald-400">const noexcept</span> { <span class="text-emerald-400">return</span> amount; }
+};
+
+<span class="text-emerald-400">class</span> <span class="text-gold-300 font-bold">FixedExpense</span> : <span class="text-emerald-400">public</span> <span class="text-gold-300 font-bold">Expense</span> {
+    <span class="text-amber-200">string</span> <span class="text-gold-400">getType</span>() <span class="text-emerald-400">const override</span> { <span class="text-emerald-400">return</span> <span class="text-emerald-300">"Fixed"</span>; }
+};</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Memory Safety & Modern C++ -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Robust Engineering</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Deterministic Memory &amp; RAII Vault</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30">
+            <div class="w-10 h-10 rounded-lg bg-emerald-950 text-gold-400 flex items-center justify-center font-bold mb-4 border border-gold-500/40">
+              UP
+            </div>
+            <h3 class="text-base font-bold text-white">std::unique_ptr</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Enforces single-ownership semantics over dynamic objects stored in <code class="text-gold-300">vector&lt;unique_ptr&lt;Expense&gt;&gt;</code>, eliminating memory leaks and double-free hazards.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30">
+            <div class="w-10 h-10 rounded-lg bg-emerald-950 text-emerald-400 flex items-center justify-center font-bold mb-4 border border-emerald-500/40">
+              RA
+            </div>
+            <h3 class="text-base font-bold text-white">Strict RAII Lifetimes</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Resource Acquisition Is Initialization: file locks and file stream buffers (<code class="text-emerald-300">ofstream</code>, <code class="text-emerald-300">ifstream</code>) automatically flush and close upon scope exit.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30">
+            <div class="w-10 h-10 rounded-lg bg-emerald-950 text-amber-400 flex items-center justify-center font-bold mb-4 border border-amber-500/40">
+              MV
+            </div>
+            <h3 class="text-base font-bold text-white">Move Semantics</h3>
+            <p class="text-xs text-slate-300 mt-2 leading-relaxed">
+              Constructors ingest string tokens via <code class="text-amber-300">std::move</code>, avoiding unnecessary heap buffer copying when instantiating temporary transaction records.
+            </p>
+          </div>
+        </div>
+
+        <div class="laser-target p-4 rounded-xl bg-vault-900 border border-gold-500/30 flex items-center justify-around text-xs font-mono text-slate-300">
+          <span class="text-emerald-400">✓ No Naked New / Delete</span>
+          <span class="text-gold-400">✓ Zero Heap Leaks</span>
+          <span class="text-amber-400">✓ Deterministic Stack Teardown</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Financial Math & 50/30/20 -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Asset Allocation Strategy</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">50/30/20 Capital Envelope Standard</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div class="glass-card laser-target p-6 rounded-xl border border-emerald-500/40 text-center">
+            <div class="text-3xl font-extrabold text-emerald-400">≤ 50%</div>
+            <h3 class="text-sm font-bold text-white mt-2">Needs (Survival Overhead)</h3>
+            <p class="text-xs text-slate-300 mt-2">
+              Essential commitments: housing rent, household groceries, utility grids, and medical insurance.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/40 text-center">
+            <div class="text-3xl font-extrabold text-gold-400">≤ 30%</div>
+            <h3 class="text-sm font-bold text-white mt-2">Wants (Lifestyle Discretionary)</h3>
+            <p class="text-xs text-slate-300 mt-2">
+              Discretionary consumption: fine dining, premium media subscriptions, leisure vacations, and hobbies.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border border-amber-500/40 text-center">
+            <div class="text-3xl font-extrabold text-amber-300">≥ 20%</div>
+            <h3 class="text-sm font-bold text-white mt-2">Wealth &amp; Savings Velocity</h3>
+            <p class="text-xs text-slate-300 mt-2">
+              Capital accumulation: index fund SIPs, emergency reserve cushions, and net investable surplus.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30 font-mono text-xs space-y-2">
+          <div class="text-gold-400 font-bold">GOVERNING INCOME EQUATIONS:</div>
+          <div class="text-slate-300">1. Gross Compensation = Basic + Allowances_HRA + Bonuses</div>
+          <div class="text-slate-300">2. Net Disposable Income = Gross − (TDS_Tax + PF_NPS_Retirals)</div>
+          <div class="text-slate-300">3. Net Monthly Surplus = Net Disposable Income − ∑ Total Monthly Expenditures</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Survival Runway & Burn Rate -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Liquidity Risk Management</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Survival Runway &amp; Cash Burn Rate</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 items-center">
+          <div class="space-y-4">
+            <div class="glass-card laser-target p-5 rounded-xl border-l-4 border-l-rose-500">
+              <div class="flex justify-between items-center">
+                <h4 class="font-bold text-sm text-white">Critical Exposure</h4>
+                <span class="text-xs font-mono text-rose-400">&lt; 3.0 Months</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">Immediate insolvency risk during career transitions or emergency events. The engine flags warnings and freezes aggressive investing.</p>
+            </div>
+
+            <div class="glass-card laser-target p-5 rounded-xl border-l-4 border-l-amber-500">
+              <div class="flex justify-between items-center">
+                <h4 class="font-bold text-sm text-white">Adequate Baseline</h4>
+                <span class="text-xs font-mono text-amber-400">3.0 – 6.0 Months</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">Standard healthy liquidity reserve. Readily absorbs unforeseen economic shocks without disrupting long-term portfolios.</p>
+            </div>
+
+            <div class="glass-card laser-target p-5 rounded-xl border-l-4 border-l-emerald-500">
+              <div class="flex justify-between items-center">
+                <h4 class="font-bold text-sm text-white">Fortified Stability</h4>
+                <span class="text-xs font-mono text-emerald-400">&gt; 6.0 Months</span>
+              </div>
+              <p class="text-xs text-slate-300 mt-1">Institutional-grade safety net. The system recommends sweeping excess idle cash into higher-yielding compound equity assets.</p>
+            </div>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30 text-center space-y-4">
+            <span class="text-xs font-bold text-gold-400 uppercase tracking-wider">Runway Diagnostic Metric</span>
+            <div class="text-2xl font-mono font-extrabold text-gold-300 py-3 bg-vault-900 rounded-lg border border-gold-500/40 shadow-inner">
+              Emergency_Runway = Liquid_Cash / Monthly_Burn
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Dynamically evaluated against real monthly expenditures, replacing optimistic static budgets with verifiable survival metrics.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Multi-Goal Waterfall Algorithm -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Greedy Capital Allocation</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Multi-Goal Priority Waterfall Engine</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-emerald-400">
+            <div class="text-xs font-mono text-emerald-400 font-bold">PHASE 1</div>
+            <h4 class="font-bold text-sm text-white mt-1">Pointer Harvesting</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Collects non-owning raw pointers (<code class="text-emerald-300">FinancialGoal*</code>) into an ephemeral vector, leaving the master heap storage intact.
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-gold-400">
+            <div class="text-xs font-mono text-gold-400 font-bold">PHASE 2</div>
+            <h4 class="font-bold text-sm text-white mt-1">Priority Sorting</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Sorts goals using a custom lambda comparator: Tier 1 (Emergency Fund) &gt; Tier 2 (Hardware/Tools) &gt; Tier 3 (Aspirational Targets).
+            </p>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border-t-2 border-t-amber-400">
+            <div class="text-xs font-mono text-amber-400 font-bold">PHASE 3</div>
+            <h4 class="font-bold text-sm text-white mt-1">Waterfall Capital Dispatch</h4>
+            <p class="text-xs text-slate-300 mt-2">
+              Directs 100% of monthly surplus into the highest-priority goal until satisfied, then cascades remaining funds into the next goal in sequence.
+            </p>
+          </div>
+        </div>
+
+        <div class="glass-card laser-target p-4 rounded-xl border border-gold-500/30 font-mono text-xs text-slate-300">
+          <span class="text-gold-400 font-bold">Waterfall Horizon Formula:</span> Cumulative_Timeline(Goal_k) = ⌈ (Target_k − Funded_k) / Surplus + ∑(Months_Prior) ⌉
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Compound Wealth & SIP Calculator -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Exponential Growth Math</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Compound Wealth &amp; SIP Projection</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2 items-center">
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30 space-y-3 font-mono text-xs">
+            <div class="text-gold-400 font-bold">ANNUITY DUE COMPOUNDING FORMULA:</div>
+            <div class="p-3 bg-vault-900 rounded border border-gold-500/40 text-gold-300 font-bold text-sm shadow-inner">
+              FV = P × [ ((1 + r)^n − 1) / r ] × (1 + r)
+            </div>
+            <div class="space-y-1 text-slate-300 text-[11px] pt-2">
+              <p>• <strong class="text-gold-400">P</strong> = Monthly Investable Surplus (Rs.)</p>
+              <p>• <strong class="text-gold-400">r</strong> = Monthly Interest Rate = (Annual ROI % / 100) / 12</p>
+              <p>• <strong class="text-gold-400">n</strong> = Total Compounding Periods = Horizon × 12</p>
+              <p>• <strong class="text-emerald-400">Net Wealth Gain</strong> = Projected Corpus − Total Capital Outlay</p>
+            </div>
+          </div>
+
+          <div class="space-y-4">
+            <div class="glass-card laser-target p-5 rounded-xl border-l-4 border-l-gold-400">
+              <h4 class="font-bold text-sm text-white">Division-By-Zero Protection</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                If the user specifies 0% annual return, the calculation gracefully switches to linear multiplication (<code class="text-gold-300">surplus * totalMonths</code>), preventing runtime arithmetic exceptions.
+              </p>
+            </div>
+
+            <div class="glass-card laser-target p-5 rounded-xl border-l-4 border-l-emerald-400">
+              <h4 class="font-bold text-sm text-white">Wealth Trajectory Analysis</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                Demonstrates how small, consistent monthly surpluses compound over 10, 20, or 30-year horizons under geometric interest curves.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: State Persistence & CSV Export -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Financial Ledger Storage</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Flat-File State Storage &amp; CSV Export</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30 space-y-3">
+            <div class="flex items-center gap-2 text-gold-400 font-bold text-sm">
+              <svg class="w-5 h-5 text-gold-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4"></path></svg>
+              <span>State File: salary_management_state.dat</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Serializes the session state to disk, including basic salary, deductions, dynamic expense vectors, and prioritized targets, automatically restoring them upon startup.
+            </p>
+            <div class="text-[11px] font-mono text-emerald-300 bg-vault-900 p-2.5 rounded border border-emerald-900/60">
+              Format: Type \n Classification \n Category \n Desc \n Amount
+            </div>
+          </div>
+
+          <div class="glass-card laser-target p-6 rounded-xl border border-gold-500/30 space-y-3">
+            <div class="flex items-center gap-2 text-emerald-400 font-bold text-sm">
+              <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
+              <span>RFC-4180 Ledger CSV Export</span>
+            </div>
+            <p class="text-xs text-slate-300 leading-relaxed">
+              Outputs all transactions to <code class="text-emerald-300">salary_management_export.csv</code> with sanitized field escaping, ready for immediate import into Excel, PowerBI, or pandas.
+            </p>
+            <div class="text-[11px] font-mono text-gold-300 bg-vault-900 p-2.5 rounded border border-gold-500/30">
+              Header: Category,Description,Type,Classification,Amount
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: Resilient Input Handling -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-5 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Fault Tolerance</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">Resilient Input Stream Architecture</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+          <div class="md:col-span-5 space-y-3">
+            <div class="glass-card laser-target p-4 rounded-xl border-l-4 border-l-rose-500">
+              <h4 class="font-bold text-sm text-white">Stream Failbit Recovery</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                When unexpected character strings are supplied to numeric inputs, <code class="text-rose-400">cin.clear()</code> resets stream flags, preventing infinite execution loops.
+              </p>
+            </div>
+
+            <div class="glass-card laser-target p-4 rounded-xl border-l-4 border-l-gold-400">
+              <h4 class="font-bold text-sm text-white">Buffer Flushes</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                Uses <code class="text-gold-300">cin.ignore(numeric_limits::max(), '\n')</code> to clear unread characters and residual newline bytes from the input buffer.
+              </p>
+            </div>
+
+            <div class="glass-card laser-target p-4 rounded-xl border-l-4 border-l-emerald-400">
+              <h4 class="font-bold text-sm text-white">Whitespace Sanitization</h4>
+              <p class="text-xs text-slate-300 mt-1">
+                <code class="text-emerald-300">getline(cin &gt;&gt; ws, str)</code> strips leading carriage returns so text fields don't accidentally capture empty strings.
+              </p>
+            </div>
+          </div>
+
+          <div class="md:col-span-7 laser-target bg-vault-950 p-4 rounded-xl border border-gold-500/40 shadow-2xl font-mono text-left">
+            <div class="flex items-center justify-between pb-2 mb-2 border-b border-emerald-900/60 text-[11px] text-slate-400">
+              <span>InputHelper.cpp</span>
+              <span class="text-gold-400">Robust Input Validation</span>
+            </div>
+            <pre><code class="text-slate-300"><span class="text-amber-200">double</span> <span class="text-gold-400">getNonNegativeDouble</span>(<span class="text-emerald-400">const</span> <span class="text-amber-200">string</span>&amp; prompt) {
+    <span class="text-amber-200">double</span> val;
+    <span class="text-emerald-400">while</span> (<span class="text-emerald-400">true</span>) {
+        cout &lt;&lt; prompt;
+        <span class="text-emerald-400">if</span> (cin &gt;&gt; val &amp;&amp; val &gt;= <span class="text-emerald-400">0.0</span>) {
+            cin.ignore(numeric_limits&lt;streamsize&gt;::max(), <span class="text-emerald-300">'\n'</span>);
+            <span class="text-emerald-400">return</span> val;
+        }
+        cout &lt;&lt; <span class="text-rose-400">"  [!] Invalid input. Positive number required.\n"</span>;
+        cin.clear();
+        cin.ignore(numeric_limits&lt;streamsize&gt;::max(), <span class="text-emerald-300">'\n'</span>);
+    }
+}</code></pre>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: Test Results & Verification -->
+    <section class="slide">
+      <div class="max-w-5xl w-full space-y-6 z-10">
+        <div>
+          <span class="text-xs font-bold text-gold-400 uppercase tracking-widest">Empirical Validation</span>
+          <h2 class="text-3xl md:text-4xl font-bold text-white mt-1">End-to-End System Test Case</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 pt-2">
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30">
+            <span class="text-xs font-mono text-gold-400 font-bold">CASE: SALARY INFLOW</span>
+            <h4 class="font-bold text-sm text-white mt-1">Income &amp; Deductions</h4>
+            <div class="mt-3 text-xs text-slate-300 space-y-1">
+              <p>• Basic Salary: Rs. 80,000</p>
+              <p>• HRA &amp; Allowances: Rs. 35,000</p>
+              <p>• TDS: Rs. 15,000 | PF: Rs. 10,000</p>
+              <p class="text-emerald-400 font-bold pt-1">➔ Take-Home: Rs. 100,000</p>
+            </div>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30">
+            <span class="text-xs font-mono text-gold-400 font-bold">CASE: EXPENDITURES</span>
+            <h4 class="font-bold text-sm text-white mt-1">50/30/20 Diagnostics</h4>
+            <div class="mt-3 text-xs text-slate-300 space-y-1">
+              <p>• Needs: Rs. 45,000 (45.0% ≤ 50%)</p>
+              <p>• Wants: Rs. 20,000 (20.0% ≤ 30%)</p>
+              <p>• Savings: Rs. 35,000 (35.0% ≥ 20%)</p>
+              <p class="text-gold-400 font-bold pt-1">➔ Status: High Velocity Saver</p>
+            </div>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30">
+            <span class="text-xs font-mono text-gold-400 font-bold">CASE: RUNWAY CHECK</span>
+            <h4 class="font-bold text-sm text-white mt-1">Reserve Cushion</h4>
+            <div class="mt-3 text-xs text-slate-300 space-y-1">
+              <p>• Monthly Burn: Rs. 65,000</p>
+              <p>• Liquid Reserves: Rs. 400,000</p>
+              <p>• Calculated Months: 6.15</p>
+              <p class="text-amber-300 font-bold pt-1">➔ Fortified Stability Cushion</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="laser-target p-4 rounded-xl bg-vault-900 border border-gold-500/30 text-xs text-slate-300 flex items-center justify-between">
+          <span>Test Suite Verification: <strong class="text-emerald-400">100% Passed (Clean Output)</strong></span>
+          <span class="text-gold-400">Zero memory leaks verified under AddressSanitizer and Valgrind.</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 13: Summary & Conclusion -->
+    <section class="slide">
+      <div class="max-w-4xl w-full text-center space-y-6 z-10">
+        <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full bg-emerald-950 border border-gold-500/40 text-gold-300 text-xs font-semibold uppercase tracking-wider shadow-lg">
+          <span>Project Defense Conclusion</span>
+        </div>
+
+        <h2 class="text-3xl md:text-5xl font-extrabold text-white">
+          Summary &amp; Project Takeaways
+        </h2>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 text-left pt-2">
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30">
+            <h4 class="font-bold text-sm text-gold-300 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-gold-400"></span> Key Engineering Milestones
+            </h4>
+            <ul class="text-xs text-slate-300 mt-3 space-y-2 list-disc list-inside">
+              <li>Engineered a fully self-contained modern C++17 personal finance core.</li>
+              <li>Integrated 50/30/20 checks, emergency burn rates, and greedy goal waterfalls.</li>
+              <li>Guaranteed exception safety and zero memory leaks using RAII smart pointers.</li>
+              <li>Enabled bi-directional disk serialization and RFC-4180 CSV exporting.</li>
+            </ul>
+          </div>
+
+          <div class="glass-card laser-target p-5 rounded-xl border border-gold-500/30">
+            <h4 class="font-bold text-sm text-emerald-300 flex items-center gap-2">
+              <span class="w-2 h-2 rounded-full bg-emerald-400"></span> Planned Future Work
+            </h4>
+            <ul class="text-xs text-slate-300 mt-3 space-y-2 list-disc list-inside">
+              <li>Cross-platform graphical desktop frontend (Qt6 / Dear ImGui).</li>
+              <li>Relational SQLite backend for multi-year historical ledger queries.</li>
+              <li>Monte Carlo wealth simulations accounting for inflation and market volatility.</li>
+              <li>Automatic Indian tax regime optimizer (Old vs. New Regime deductions).</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="pt-6">
+          <h3 class="text-2xl font-bold text-slate-100">Thank You!</h3>
+          <p class="text-sm text-gold-300/80 mt-1">Questions &amp; Discussion Welcomed</p>
+          <div class="mt-4 text-xs text-slate-300">
+            <span>Candidate: <strong>Sonali Swetapadma Kar</strong> (B125121)</span>
+            <span class="mx-2">•</span>
+            <span>Supervisor: <strong>Dr. Soubhagya Srichandan</strong></span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ========================================================================= -->
+  <!-- FLOATING PRESENTATION CONTROLS (BOTTOM) -->
+  <!-- ========================================================================= -->
+  <footer class="fixed bottom-4 left-0 right-0 flex items-center justify-between px-6 z-40 pointer-events-none">
+    <!-- Slide Counter & Info -->
+    <div class="glass-card px-3.5 py-2 rounded-xl pointer-events-auto text-xs font-mono text-slate-300 flex items-center gap-2 border border-gold-500/30 shadow-lg">
+      <span class="text-emerald-400">LEDGER</span>
+      <span id="current-slide-num" class="font-bold text-gold-400 text-sm">01</span>
+      <span class="text-slate-400">/</span>
+      <span id="total-slides-num" class="text-slate-400">13</span>
+    </div>
+
+    <!-- Center Navigation Buttons -->
+    <div class="glass-card px-4 py-2 rounded-2xl pointer-events-auto flex items-center space-x-3 border border-gold-500/30 shadow-xl">
+      <button id="prev-btn" class="p-2 rounded-lg bg-vault-900 hover:bg-gold-500/20 text-slate-300 hover:text-gold-400 transition" title="Previous Slide (Left Arrow)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>
+      </button>
+
+      <span class="text-[11px] text-emerald-300/80 font-medium px-1 hidden sm:inline-block">Swipe or &larr; &rarr; keys</span>
+
+      <button id="next-btn" class="p-2 rounded-lg bg-vault-900 hover:bg-gold-500/20 text-slate-300 hover:text-gold-400 transition" title="Next Slide (Right Arrow / Space)">
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path></svg>
+      </button>
+    </div>
+
+    <!-- Quick Shortcuts Legend -->
+    <div class="glass-card px-3 py-1.5 rounded-xl pointer-events-auto text-[11px] text-slate-300 hidden lg:flex items-center gap-3 border border-gold-500/30">
+      <span><kbd class="px-1 py-0.5 bg-vault-900 text-gold-400 rounded border border-gold-500/30">Space</kbd> Next</span>
+      <span><kbd class="px-1 py-0.5 bg-vault-900 text-gold-400 rounded border border-gold-500/30">L</kbd> Gold Laser</span>
+      <span><kbd class="px-1 py-0.5 bg-vault-900 text-gold-400 rounded border border-gold-500/30">G</kbd> Grid</span>
+    </div>
+  </footer>
+
+  <!-- ========================================================================= -->
+  <!-- MODAL: GRID OVERVIEW DRAWER -->
+  <!-- ========================================================================= -->
+  <div id="grid-modal" class="fixed inset-0 bg-vault-950/95 backdrop-blur-xl z-50 p-6 md:p-12 overflow-y-auto hidden opacity-0 transition-opacity duration-200">
+    <div class="max-w-6xl mx-auto space-y-6">
+      <div class="flex items-center justify-between border-b border-gold-500/30 pb-4">
+        <div>
+          <h3 class="text-xl font-bold text-gold-300">Financial Presentation Overview</h3>
+          <p class="text-xs text-slate-400">Select any card to navigate immediately</p>
+        </div>
+        <button id="close-grid-btn" class="p-2 rounded-lg bg-vault-900 hover:bg-emerald-900/60 text-slate-300 hover:text-white transition border border-gold-500/30">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+
+      <div id="grid-thumbnails" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+        <!-- Rendered dynamically by JavaScript -->
+      </div>
+    </div>
+  </div>
+
+  <!-- SCRIPT LOGIC -->
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      // Configuration & State
+      let currentSlide = 0;
+      const slides = document.querySelectorAll('.slide');
+      const totalSlides = slides.length;
+      const sliderContainer = document.getElementById('slider-container');
+      const progressBar = document.getElementById('progress-bar');
+      const currentSlideNum = document.getElementById('current-slide-num');
+      const totalSlidesNum = document.getElementById('total-slides-num');
+      totalSlidesNum.textContent = String(totalSlides).padStart(2, '0');
+
+      // Golden Laser Pointer Variables
+      let laserActive = true;
+      const laserDot = document.getElementById('laser-pointer');
+      const trailCanvas = document.getElementById('laser-trail-canvas');
+      const ctx = trailCanvas.getContext('2d');
+      const toggleLaserBtn = document.getElementById('toggle-laser-btn');
+      const laserDotIndicator = document.getElementById('laser-indicator-dot');
+
+      let mousePos = { x: window.innerWidth / 2, y: window.innerHeight / 2 };
+      let trailPoints = [];
+      const MAX_TRAIL = 18;
+
+      let currentlyHoveredBox = null;
+
+      // Golden sparks on laser touch
+      function spawnLaserSparks(x, y) {
+        const count = 8;
+        for (let i = 0; i < count; i++) {
+          const spark = document.createElement('div');
+          spark.className = 'laser-spark';
+          const size = Math.random() * 4 + 2;
+          spark.style.width = `${size}px`;
+          spark.style.height = `${size}px`;
+          spark.style.left = `${x}px`;
+          spark.style.top = `${y}px`;
+
+          const angle = Math.random() * Math.PI * 2;
+          const dist = Math.random() * 48 + 16;
+          const tx = Math.cos(angle) * dist;
+          const ty = Math.sin(angle) * dist;
+
+          spark.style.setProperty('--tx', `${tx}px`);
+          spark.style.setProperty('--ty', `${ty}px`);
+          document.body.appendChild(spark);
+
+          setTimeout(() => spark.remove(), 480);
+        }
+      }
+
+      function checkLaserBoxInteractions(x, y) {
+        if (!laserActive) {
+          if (currentlyHoveredBox) {
+            currentlyHoveredBox.classList.remove('laser-hovered');
+            currentlyHoveredBox = null;
+          }
+          return;
+        }
+
+        const el = document.elementFromPoint(x, y);
+        const targetBox = el ? el.closest('.laser-target') : null;
+
+        if (targetBox !== currentlyHoveredBox) {
+          if (currentlyHoveredBox) {
+            currentlyHoveredBox.classList.remove('laser-hovered');
+          }
+          if (targetBox) {
+            targetBox.classList.add('laser-hovered');
+            spawnLaserSparks(x, y);
+          }
+          currentlyHoveredBox = targetBox;
+        }
+      }
+
+      function resizeCanvas() {
+        trailCanvas.width = window.innerWidth;
+        trailCanvas.height = window.innerHeight;
+      }
+      resizeCanvas();
+      window.addEventListener('resize', resizeCanvas);
+
+      function goToSlide(index) {
+        if (index < 0) index = 0;
+        if (index >= totalSlides) index = totalSlides - 1;
+        currentSlide = index;
+
+        if (currentlyHoveredBox) {
+          currentlyHoveredBox.classList.remove('laser-hovered');
+          currentlyHoveredBox = null;
+        }
+
+        sliderContainer.style.transform = `translateX(-${currentSlide * 100}vw)`;
+
+        currentSlideNum.textContent = String(currentSlide + 1).padStart(2, '0');
+        const progressPct = ((currentSlide + 1) / totalSlides) * 100;
+        progressBar.style.width = `${progressPct}%`;
+      }
+
+      function nextSlide() { goToSlide(currentSlide + 1); }
+      function prevSlide() { goToSlide(currentSlide - 1); }
+
+      document.getElementById('next-btn').addEventListener('click', nextSlide);
+      document.getElementById('prev-btn').addEventListener('click', prevSlide);
+
+      window.addEventListener('keydown', (e) => {
+        if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+
+        switch (e.key) {
+          case 'ArrowRight':
+          case 'PageDown':
+          case ' ':
+            e.preventDefault();
+            nextSlide();
+            break;
+          case 'ArrowLeft':
+          case 'PageUp':
+            e.preventDefault();
+            prevSlide();
+            break;
+          case 'Home':
+            e.preventDefault();
+            goToSlide(0);
+            break;
+          case 'End':
+            e.preventDefault();
+            goToSlide(totalSlides - 1);
+            break;
+          case 'l':
+          case 'L':
+            toggleLaser();
+            break;
+          case 'g':
+          case 'G':
+            toggleGridModal();
+            break;
+          case 'f':
+          case 'F':
+            toggleFullscreen();
+            break;
+          case 'Escape':
+            closeGridModal();
+            break;
+        }
+      });
+
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        if (touchEndX < touchStartX - 50) nextSlide();
+        if (touchEndX > touchStartX + 50) prevSlide();
+      }, { passive: true });
+
+      function toggleLaser() {
+        laserActive = !laserActive;
+        if (laserActive) {
+          laserDot.style.opacity = '1';
+          laserDotIndicator.classList.remove('bg-slate-500', 'shadow-none');
+          laserDotIndicator.classList.add('bg-gold-400', 'shadow-[0_0_10px_#facc15]');
+        } else {
+          laserDot.style.opacity = '0';
+          trailPoints = [];
+          ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+          laserDotIndicator.classList.remove('bg-gold-400', 'shadow-[0_0_10px_#facc15]');
+          laserDotIndicator.classList.add('bg-slate-500', 'shadow-none');
+          if (currentlyHoveredBox) {
+            currentlyHoveredBox.classList.remove('laser-hovered');
+            currentlyHoveredBox = null;
+          }
+        }
+      }
+
+      toggleLaserBtn.addEventListener('click', toggleLaser);
+
+      window.addEventListener('mousemove', (e) => {
+        mousePos.x = e.clientX;
+        mousePos.y = e.clientY;
+
+        if (laserActive) {
+          laserDot.style.opacity = '1';
+          laserDot.style.left = `${mousePos.x}px`;
+          laserDot.style.top = `${mousePos.y}px`;
+
+          trailPoints.push({ x: mousePos.x, y: mousePos.y, age: 0 });
+          if (trailPoints.length > MAX_TRAIL) {
+            trailPoints.shift();
+          }
+
+          checkLaserBoxInteractions(mousePos.x, mousePos.y);
+        }
+      });
+
+      window.addEventListener('click', (e) => {
+        if (!laserActive) return;
+        const ripple = document.createElement('div');
+        ripple.className = 'click-ripple';
+        ripple.style.left = `${e.clientX}px`;
+        ripple.style.top = `${e.clientY}px`;
+        document.body.appendChild(ripple);
+        setTimeout(() => ripple.remove(), 550);
+      });
+
+      function renderTrail() {
+        if (laserActive && trailPoints.length > 1) {
+          ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+
+          for (let i = 0; i < trailPoints.length - 1; i++) {
+            const p1 = trailPoints[i];
+            const p2 = trailPoints[i + 1];
+            p1.age += 1;
+
+            const alpha = (1 - (p1.age / MAX_TRAIL)) * 0.55;
+            if (alpha <= 0) continue;
+
+            ctx.beginPath();
+            ctx.moveTo(p1.x, p1.y);
+            ctx.lineTo(p2.x, p2.y);
+            ctx.strokeStyle = `rgba(250, 204, 21, ${alpha})`;
+            ctx.lineWidth = 4.5 * (1 - (p1.age / MAX_TRAIL));
+            ctx.lineCap = 'round';
+            ctx.stroke();
+          }
+
+          trailPoints = trailPoints.filter(p => p.age < MAX_TRAIL);
+        } else if (!laserActive && trailPoints.length > 0) {
+          ctx.clearRect(0, 0, trailCanvas.width, trailCanvas.height);
+          trailPoints = [];
+        }
+        requestAnimationFrame(renderTrail);
+      }
+      requestAnimationFrame(renderTrail);
+
+      if (laserActive) {
+        laserDot.style.opacity = '1';
+      }
+
+      // Grid Modal Overview
+      const gridModal = document.getElementById('grid-modal');
+      const toggleGridBtn = document.getElementById('toggle-grid-btn');
+      const closeGridBtn = document.getElementById('close-grid-btn');
+      const gridThumbnails = document.getElementById('grid-thumbnails');
+
+      slides.forEach((slide, idx) => {
+        const titleEl = slide.querySelector('h1, h2');
+        const slideTitle = titleEl ? titleEl.innerText : `Slide ${idx + 1}`;
+
+        const card = document.createElement('div');
+        card.className = 'glass-card glass-card-interactive p-4 rounded-xl cursor-pointer text-left border border-gold-500/30 hover:border-gold-400';
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-[11px] font-mono text-gold-400 mb-2">
+            <span>SLIDE ${String(idx + 1).padStart(2, '0')}</span>
+          </div>
+          <h4 class="text-xs font-bold text-slate-100 line-clamp-2">${slideTitle}</h4>
+        `;
+        card.addEventListener('click', () => {
+          goToSlide(idx);
+          closeGridModal();
+        });
+        gridThumbnails.appendChild(card);
+      });
+
+      function openGridModal() {
+        gridModal.classList.remove('hidden');
+        setTimeout(() => gridModal.classList.remove('opacity-0'), 10);
+      }
+      function closeGridModal() {
+        gridModal.classList.add('opacity-0');
+        setTimeout(() => gridModal.classList.add('hidden'), 200);
+      }
+      function toggleGridModal() {
+        if (gridModal.classList.contains('hidden')) openGridModal();
+        else closeGridModal();
+      }
+
+      toggleGridBtn.addEventListener('click', toggleGridModal);
+      closeGridBtn.addEventListener('click', closeGridModal);
+
+      // Fullscreen Toggle
+      const fullscreenBtn = document.getElementById('toggle-fullscreen-btn');
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        } else {
+          if (document.exitFullscreen) document.exitFullscreen();
+        }
+      }
+      fullscreenBtn.addEventListener('click', toggleFullscreen);
+
+      goToSlide(0);
+    });
+  </script>
+</body>
+</html>
