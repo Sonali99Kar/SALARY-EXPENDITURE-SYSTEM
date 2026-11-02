@@ -1,57 +1,43 @@
 <div align="center">
 
-<style>
-  @keyframes popup {
-    0% { transform: scale(0.5); opacity: 0; }
-    100% { transform: scale(1); opacity: 1; }
-  }
+  <h1>
+    <span style="background: linear-gradient(45deg, #ff416c, #ff4b2b, #8a2387, #e94057, #f27121); -webkit-background-clip: text; -webkit-text-fill-color: transparent; font-size: 1.3em;">
+      💰 Salary & Expenditure System 🚀
+    </span>
+  </h1>
 
-  .animated-title {
-    font-size: 2.5em;
-    font-weight: bold;
-    background: linear-gradient(45deg, #ff416c, #ff4b2b, #8a2387, #e94057, #f27121);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    animation: popup 1.2s ease-out forwards;
-    margin-bottom: 20px;
-  }
+  <p style="color: #8b949e; font-size: 1.1em;">
+    A smart and efficient way to manage your finances, track spending, and analyze budgets.
+  </p>
 
-  .zoom-card {
-    background: #1e1e2f;
-    color: #ffffff;
-    padding: 20px;
-    border-radius: 12px;
-    display: inline-block;
-    transition: transform 0.3s ease, box-shadow 0.3s ease;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-    cursor: pointer;
-    margin: 10px;
-  }
+  <br>
 
-  .zoom-card:hover {
-    transform: scale(1.08);
-    box-shadow: 0 8px 25px rgba(255, 75, 43, 0.4);
-  }
-</style>
+  <!-- Interactive / Hover Highlight Blocks -->
+  <table width="100%" style="border: none; border-collapse: collapse;">
+    <tr>
+      <td width="50%" align="center" style="padding: 10px;">
+        <a href="https://github.com/Sonali99Kar/SALARY-EXPENDITURE-SYSTEM/blob/main/ses.cpp">
+          <img src="https://img.shields.io/badge/⚡_Core_Features-Track_Income_%26_Expenses-blueviolet?style=for-the-badge&logo=appveyor" width="100%"/>
+        </a>
+      </td>
+      <td width="50%" align="center" style="padding: 10px;">
+        <a href="https://github.com/Sonali99Kar/SALARY-EXPENDITURE-SYSTEM/blob/main/Salary%20Management%20System%20Interactive%20Presentation%20(2).html">
+          <img src="https://img.shields.io/badge/📊_Interactive_Presentation-View_Project_Overview-success?style=for-the-badge&logo=HTML5" width="100%"/>
+        </a>
+      </td>
+    </tr>
+  </table>
 
-<div class="animated-title">
-  💰 Salary & Expenditure System 🚀
-</div>
+  <br>
 
-<p style="color: #a0aec0; font-size: 1.1em;">
-  A smart and efficient way to manage your finances, track spending, and analyze budgets.
-</p>
-
-<br>
-
-<div class="zoom-card">
-  <h3>⚡ Core Features</h3>
-  <p>Track income, manage daily expenses, and view financial breakdowns effortlessly.</p>
-</div>
-
-<div class="zoom-card">
   <h3>🛠️ Built With C++</h3>
-  <p>Robust console-based logic designed for speed and reliability.</p>
-</div>
+  <p>Robust console-based logic designed for speed, structure, and reliability.</p>
+
+  <br>
+
+  <p>
+    <img src="https://img.shields.io/badge/Language-C++-00599C?style=flat-square&logo=c%2b%2b&logoColor=white" />
+    <img src="https://img.shields.io/badge/Status-Active-brightgreen?style=flat-square" />
+  </p>
 
 </div>
